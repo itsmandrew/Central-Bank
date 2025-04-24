@@ -8,6 +8,8 @@ func (m MapProvider) Get(key string) string {
 	return m[key]
 }
 
+// Easier to test, don't need to setup env variables, easier to scale.
+// SSOT: production loader is the same and tests never touch the real .env files
 func TestLoadWith(t *testing.T) {
 	mp := MapProvider{
 		"PORT":            "1234",
