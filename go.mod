@@ -1,4 +1,4 @@
-module github.com/itsmandrew/central-finance
+module github.com/itsmandrew/Central-Bank
 
 go 1.24.1
 

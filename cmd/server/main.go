@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/itsmandrew/central-finance/internal/config"
+	"github.com/itsmandrew/Central-Bank/internal/config"
 )
 
 func main() {
