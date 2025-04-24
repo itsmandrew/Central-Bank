@@ -7,6 +7,16 @@ import (
 	"github.com/joho/godotenv"
 )
 
+type EnvProvider interface {
+	Get(key string) string
+}
+
+type osProvider struct{}
+
+func (osProvider) Get(key string) string {
+	return os.Getenv(key)
+}
+
 type Config struct {
 	Port          string
 	DBUrl         string
@@ -15,19 +25,23 @@ type Config struct {
 	PlaidEnv      string
 }
 
+func LoadWith(p EnvProvider) *Config {
+	cfg := &Config{
+		Port:          p.Get("PORT"),
+		DBUrl:         p.Get("DATABASE_URL"),
+		PlaidClientID: p.Get("PLAID_CLIENT_ID"),
+		PlaidSecret:   p.Get("PLAID_SECRET"),
+		PlaidEnv:      p.Get("PLAID_ENV"),
+	}
+
+	// TODO: validate required fields here, log.Fatal if missing
+	return cfg
+}
+
 func Load() *Config {
-
-	err := godotenv.Load()
-	if err != nil {
-		// Will fail quietly if no .env file
-		log.Println("Error loading .env file")
+	if err := godotenv.Load(); err != nil {
+		log.Println("no .env file, relying on real env")
 	}
 
-	return &Config{
-		Port:          os.Getenv("PORT"),
-		DBUrl:         os.Getenv("DATABASE_URL"),
-		PlaidClientID: os.Getenv("PLAID_CLIENT_ID"),
-		PlaidSecret:   os.Getenv("PLAID_SECRET"),
-		PlaidEnv:      os.Getenv("PLAID_ENV"),
-	}
+	return LoadWith(osProvider{})
 }
