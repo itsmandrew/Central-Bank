@@ -19,7 +19,8 @@ func Load() *Config {
 
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		// Will fail quietly if no .env file
+		log.Println("Error loading .env file")
 	}
 
 	return &Config{
