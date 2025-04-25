@@ -2,7 +2,10 @@ package db
 
 import (
 	"database/sql"
+
 	"log"
+
+	_ "github.com/lib/pq"
 )
 
 func Connect(dbURL string) *sql.DB {
