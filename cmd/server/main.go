@@ -21,7 +21,13 @@ func main() {
 	}
 
 	// Connect to Postgres database
-	database := db.Connect(dbURL)
+	database, err := db.Connect(dbURL)
+
+	if err != nil {
+		log.Printf("Failed to connect to database: %v", err)
+		log.Fatalf("Database connection is required, exiting: %v", err)
+	}
+
 	defer database.Close()
 
 	fmt.Println("✅ Successfully connected to Postgres!")

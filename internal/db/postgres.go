@@ -3,21 +3,25 @@ package db
 import (
 	"database/sql"
 
-	"log"
-
-	_ "github.com/lib/pq"
+	_ "github.com/lib/pq" // postgres driver
 )
 
-func Connect(dbURL string) *sql.DB {
-	db, err := sql.Open("postgres", dbURL)
+// Make openDB a variable so it can be replaced in tests
+var openDB = func(driver, dsn string) (*sql.DB, error) {
+	return sql.Open(driver, dsn)
+}
 
+// Connect establishes a connection to the database using the provided URL
+func Connect(dbURL string) (*sql.DB, error) {
+	db, err := openDB("postgres", dbURL)
 	if err != nil {
-		log.Fatalf("Db open error: %v", err)
+		return nil, err
 	}
 
 	if err := db.Ping(); err != nil {
-		log.Fatalf("Db ping error: %v", err)
+		db.Close() // Close the connection before returning
+		return nil, err
 	}
 
-	return db
+	return db, nil
 }
