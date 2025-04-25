@@ -6,6 +6,7 @@ import (
 
 	"github.com/itsmandrew/Central-Bank/internal/config"
 	"github.com/itsmandrew/Central-Bank/internal/db"
+	"github.com/itsmandrew/Central-Bank/internal/transport"
 )
 
 func main() {
@@ -24,4 +25,13 @@ func main() {
 	defer database.Close()
 
 	fmt.Println("✅ Successfully connected to Postgres!")
+
+	router := transport.NewRouter(
+		cfg, database,
+	)
+
+	log.Printf("Starting server on %s...", cfg.Port)
+	if err := router.Run(":" + cfg.Port); err != nil {
+		log.Fatalf("Server run error: %v", err)
+	}
 }
