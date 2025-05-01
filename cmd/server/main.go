@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/itsmandrew/Central-Bank/internal/api"
 	"github.com/itsmandrew/Central-Bank/internal/config"
 	"github.com/itsmandrew/Central-Bank/internal/db"
-	"github.com/itsmandrew/Central-Bank/internal/transport"
 )
 
 func main() {
@@ -32,7 +32,7 @@ func main() {
 
 	fmt.Println("✅ Successfully connected to Postgres!")
 
-	router := transport.NewRouter(
+	router := api.NewRouter(
 		cfg, database,
 	)
 
